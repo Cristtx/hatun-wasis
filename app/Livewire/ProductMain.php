@@ -2,131 +2,139 @@
 
 namespace App\Livewire;
 
-use App\Models\Product;
-use Flux\Flux;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\Product; // Asegúrate de que este sea el nombre correcto de tu modelo
 
 class ProductMain extends Component
 {
     use WithPagination;
 
-    public $search;
+    // --- VARIABLES DE INTERFAZ Y BÚSQUEDA ---
+    public $search = '';
+    public $productSelectedId; // Para el modal de imágenes
+    public $deleteId; // Para el modal de confirmación de borrado
 
-    public $descripcion;
-
-    public $id;
-
-    public $productSelectedId = null;
-
-    #[Validate('required|min:4')]
+    // --- VARIABLES DEL CRUD (Módulo Cerámicas) ---
+    public $id; // ID del producto (null si es nuevo)
+    public $codigo_sku;
     public $nombre;
+    public $descripcion;
+    public $tipo = 'Porcelanato';
+    public $formato;
+    public $acabado;
+    public $cantidad; // Stock en cajas/unidades
+    public $precio; // Precio de venta
+    public $disponible = true;
 
-    #[Validate('accepted')]
-    public $disponible;
-
-    #[Validate('required|numeric|min:1')]
-    public $cantidad;
-
-    public $precio;
-
-    public function updatingSearch(): void
+    // Resetear paginación cuando se busca algo
+    public function updatingSearch()
     {
         $this->resetPage();
     }
 
-    public function render()
-    {
-        $productos = Product::where('nombre', 'like', '%'.$this->search.'%')
-            ->latest()->paginate();
+    // --- FUNCIONES DEL CRUD ---
 
-        return view('livewire.product-main', compact('productos'));
+    public function create()
+    {
+        // Limpiamos el formulario
+        $this->reset(['id', 'codigo_sku', 'nombre', 'descripcion', 'tipo', 'formato', 'acabado', 'cantidad', 'precio']);
+        $this->disponible = true;
+
+        // La vista Blade se encarga de abrir el modal con <flux:modal.trigger>
+    }
+
+    public function edit($id)
+    {
+        $producto = Product::findOrFail($id);
+
+        $this->id = $producto->id;
+        $this->codigo_sku = $producto->codigo_sku;
+        $this->nombre = $producto->nombre;
+        $this->descripcion = $producto->descripcion;
+        $this->tipo = $producto->tipo ?? 'Porcelanato';
+        $this->formato = $producto->formato;
+        $this->acabado = $producto->acabado;
+        $this->cantidad = $producto->cantidad;
+        $this->precio = $producto->precio;
+        $this->disponible = $producto->disponible;
+
+        // Abrimos el modal programáticamente
+        $this->dispatch('modal', name: 'showform')->to('flux::modal');
     }
 
     public function save()
     {
-        $this->validate();
-        if (! $this->id) {
-            Product::create([
+        // Validación básica
+        $this->validate([
+            'nombre' => 'required|string|max:255',
+            'codigo_sku' => 'nullable|string|max:50',
+            'precio' => 'required|numeric|min:0',
+            'cantidad' => 'required|numeric|min:0',
+        ]);
+
+        // Guardar o Actualizar
+        Product::updateOrCreate(
+            ['id' => $this->id],
+            [
+                'codigo_sku' => $this->codigo_sku,
                 'nombre' => $this->nombre,
                 'descripcion' => $this->descripcion,
+                'tipo' => $this->tipo,
+                'formato' => $this->formato,
+                'acabado' => $this->acabado,
                 'cantidad' => $this->cantidad,
                 'precio' => $this->precio,
                 'disponible' => $this->disponible,
-            ]);
-            Flux::toast(
-                heading: 'Producto registrado.',
-                text: 'El registro se realizo correctamente.',
-                variant: 'success'
-            );
-        } else {
-            $producto = Product::find($this->id);
-            $producto->update([
-                'nombre' => $this->nombre,
-                'descripcion' => $this->descripcion,
-                'cantidad' => $this->cantidad,
-                'precio' => $this->precio,
-                'disponible' => $this->disponible,
-            ]);
-            Flux::toast(
-                heading: 'Producto actualizado.',
-                text: 'El registro se actualizo correctamente.',
-                variant: 'success'
-            );
-        }
-        $this->modal('showform')->close();
+            ]
+        );
+
+        // Cerramos modal y mostramos mensaje
+        $this->dispatch('modal', name: 'showform')->to('flux::modal');
+        $this->dispatch('toast', variant: 'success', heading: '¡Éxito!', message: 'Material guardado correctamente.');
+        $this->reset(['id', 'codigo_sku', 'nombre', 'descripcion', 'tipo', 'formato', 'acabado', 'cantidad', 'precio']);
     }
 
-    public function edit(Product $item)
+    // --- FUNCIONES EXTRA (Tus funciones originales) ---
+
+    public function toggleDisponible($id)
     {
-        $this->id = $item->id;
-        $this->nombre = $item->nombre;
-        $this->descripcion = $item->descripcion;
-        $this->cantidad = $item->cantidad;
-        $this->precio = $item->precio;
-        $this->disponible = $item->disponible;
-        $this->modal('showform')->show();
+        $producto = Product::findOrFail($id);
+        $producto->disponible = !$producto->disponible;
+        $producto->save();
+
+        $this->dispatch('toast', variant: 'success', heading: 'Actualizado', message: 'Estado de visibilidad modificado.');
     }
 
-    public function create()
+    public function openUpload($id)
     {
-        $this->reset(['id', 'nombre', 'descripcion', 'cantidad', 'precio', 'disponible']);
-        $this->modal('showform')->show();
+        $this->productSelectedId = $id;
+        $this->dispatch('modal', name: 'showimage')->to('flux::modal');
     }
 
-    // === METODO PARA ELIMINAR EL PRODUCTO ===
-    public function confirm(Product $item)
+    public function confirm($id)
     {
-        $this->id = $item->id;
-        $this->modal('delete-profile')->show();
+        $this->deleteId = $id;
+        $this->dispatch('modal', name: 'delete-profile')->to('flux::modal');
     }
 
     public function delete()
     {
-        $producto = Product::find($this->id);
-        $producto->update([
-            'disponible' => false, // Soft delete
-        ]);
-        Flux::toast(
-            heading: 'Producto eliminado.',
-            text: 'El registro se borró correctamente.',
-            variant: 'success'
-        );
-        $this->modal('delete-profile')->close();
+        if ($this->deleteId) {
+            Product::findOrFail($this->deleteId)->delete();
+            $this->dispatch('modal', name: 'delete-profile')->to('flux::modal');
+            $this->dispatch('toast', variant: 'success', heading: 'Eliminado', message: 'El registro fue borrado.');
+        }
     }
 
-    // === METODO PARA ALTERNAR DISPONIBILIDAD ===
-    public function toggleDisponible(Product $product)
+    public function render()
     {
-        $product->update([
-            'disponible' => ! $product->disponible,
-        ]);
-    }
+        // Búsqueda por nombre o por código SKU
+        $productos = Product::where('nombre', 'like', '%' . $this->search . '%')
+            ->orWhere('codigo_sku', 'like', '%' . $this->search . '%')
+            ->latest()
+            ->paginate(10);
 
-    public function openUpload(Product $item)
-    {
-        $this->productSelectedId = $item->id;
-        $this->modal('showimage')->show();
+        return view('livewire.product-main', compact('productos'));
     }
 }

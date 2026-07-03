@@ -11,15 +11,39 @@
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
+                {{-- 1. ÁREA PRINCIPAL --}}
                 <flux:sidebar.group :heading="__('Platform')" class="grid">
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="cube" :href="route('productos')" :current="request()->routeIs('productos')" wire:navigate>
-                        {{ __('Productos') }}
-                    </flux:sidebar.item>
+                </flux:sidebar.group>
+
+                {{-- 2. MÓDULO COMERCIAL Y VENTAS --}}
+                <flux:sidebar.group :heading="__('Comercial')" class="grid mt-4">
                     <flux:sidebar.item icon="users" :href="route('clientes')" :current="request()->routeIs('clientes')" wire:navigate>
                         {{ __('Clientes') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="document-text" href="#" wire:navigate>
+                        {{ __('Cotizaciones') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="shopping-bag" href="#" wire:navigate>
+                        {{ __('Órdenes de Venta') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
+
+                {{-- 3. MÓDULO DE INVENTARIOS --}}
+                <flux:sidebar.group :heading="__('Inventario')" class="grid mt-4">
+                    <flux:sidebar.item icon="cube" :href="route('productos')" :current="request()->routeIs('productos')" wire:navigate>
+                        {{ __('Catálogo General') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="tag" href="#" wire:navigate>
+                        {{ __('Lotes y Tonos') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="adjustments-horizontal" href="#" wire:navigate>
+                        {{ __('Formatos y Acabados') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="arrow-path" href="#" wire:navigate>
+                        {{ __('Movimientos / Stock') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>

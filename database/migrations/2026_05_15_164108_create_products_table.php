@@ -14,10 +14,16 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->string('codigo_sku')->nullable(); // Nuevo: Para identificar el producto
+            $table->string('tipo')->default('Porcelanato'); // Nuevo: Porcelanato, Pegamento, etc.
+            $table->string('formato')->nullable(); // Nuevo: 60x120, etc.
+            $table->string('acabado')->nullable(); // Nuevo: Mate, Pulido
             $table->text('descripcion')->nullable();
-            $table->integer('cantidad');
+
+            // Cantidad la mantendremos, pero asegúrate de que maneje el stock
+            $table->integer('cantidad')->default(0);
             $table->double('precio');
-            $table->boolean('disponible');
+            $table->boolean('disponible')->default(true);
             $table->timestamps();
         });
     }

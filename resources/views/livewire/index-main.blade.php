@@ -1,103 +1,103 @@
-<div>
-    <style>
-        @keyframes kenburns {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
-        .animate-kenburns {
-            animation: kenburns 7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-    </style>
- 
-    {{-- Hero Section --}}
+    <div>
+        <style>
+            @keyframes kenburns {
+                0% { transform: scale(1); }
+                100% { transform: scale(1.1); }
+            }
+            .animate-kenburns {
+                animation: kenburns 7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            }
+        </style>
 
-    <section id="hero" class="relative min-h-screen flex items-center overflow-hidden bg-zinc-950">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-        <canvas id="canvas-splendor" class="absolute inset-0 z-0 pointer-events-none" style="filter: contrast(1.1) brightness(1.1); opacity: 1;"></canvas>
+        {{-- Hero Section --}}
 
-        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 lg:py-36">
-            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <section id="hero" class="relative min-h-screen flex items-center overflow-hidden bg-zinc-950">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+            <canvas id="canvas-splendor" class="absolute inset-0 z-0 pointer-events-none" style="filter: contrast(1.1) brightness(1.1); opacity: 1;"></canvas>
 
-                {{-- LEFT: Text Content --}}
-                <div class="text-center lg:text-left animate-fade-in-up">
-                     <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold-500/10 border border-gold-500/25 text-gold-400 text-xs font-semibold uppercase tracking-widest mb-8">
-                         <span class="w-1.5 h-1.5 rounded-full bg-gold-400"></span>
-                         Premium Collection
-                     </div>
-                     <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-5">
-                         Hatun Wasi
-                     </h1>
-                     <p class="text-base sm:text-lg text-zinc-400 font-light leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
-                         Discover the finest curated selection of ceramics and porcelain — where timeless craftsmanship meets contemporary elegance for your most inspiring spaces.
-                     </p>
-                     <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
-                         <a href="#featured-products" class="btn-gold px-8 py-3.5 rounded-lg text-sm font-semibold uppercase tracking-wider transition-all hover:shadow-xl hover:shadow-gold-500/25 hover:-translate-y-0.5">
-                             View Catalog
-                         </a>
-                         <a href="#contact" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg text-sm font-semibold uppercase tracking-wider text-zinc-300 border border-zinc-700 hover:bg-white hover:text-zinc-900 transition-all hover:-translate-y-0.5">
-                             Contact Us
-                         </a>
-                     </div>
-                 </div>
+            <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 lg:py-36">
+                <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-                 {{-- RIGHT: Product Image with Overlaid Glassmorphism Cards --}}
-                  <div class="hidden lg:block relative">
-                      <div class="aspect-[4/5] max-w-lg mx-auto"></div>
-   
-                      {{-- Floating Glassmorphism Cards Overlaid --}}
-                    <div class="absolute -left-8 top-[15%] floating-card card-glass rounded-xl px-5 py-4 w-64">
-                        <div class="flex items-center gap-4">
-                            <div class="w-11 h-11 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
-                                <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
-                                </svg>
+                    {{-- LEFT: Text Content --}}
+                    <div class="text-center lg:text-left animate-fade-in-up">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gold-500/10 border border-gold-500/25 text-gold-400 text-xs font-semibold uppercase tracking-widest mb-8">
+                            <span class="w-1.5 h-1.5 rounded-full bg-gold-400"></span>
+                            Premium Collection
+                        </div>
+                        <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-5">
+                            Hatun Wasi
+                        </h1>
+                        <p class="text-base sm:text-lg text-zinc-400 font-light leading-relaxed mb-8 max-w-lg mx-auto lg:mx-0">
+                            Discover the finest curated selection of ceramics and porcelain — where timeless craftsmanship meets contemporary elegance for your most inspiring spaces.
+                        </p>
+                        <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+                            <a href="#featured-products" class="btn-gold px-8 py-3.5 rounded-lg text-sm font-semibold uppercase tracking-wider transition-all hover:shadow-xl hover:shadow-gold-500/25 hover:-translate-y-0.5">
+                                View Catalog
+                            </a>
+                            <a href="#contact" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg text-sm font-semibold uppercase tracking-wider text-zinc-300 border border-zinc-700 hover:bg-white hover:text-zinc-900 transition-all hover:-translate-y-0.5">
+                                Contact Us
+                            </a>
+                        </div>
+                    </div>
+
+                    {{-- RIGHT: Product Image with Overlaid Glassmorphism Cards --}}
+                    <div class="hidden lg:block relative">
+                        <div class="aspect-[4/5] max-w-lg mx-auto"></div>
+
+                        {{-- Floating Glassmorphism Cards Overlaid --}}
+                        <div class="absolute -left-8 top-[15%] floating-card card-glass rounded-xl px-5 py-4 w-64">
+                            <div class="flex items-center gap-4">
+                                <div class="w-11 h-11 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
+                                    <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-white font-semibold text-sm">Premium Products</p>
+                                    <p class="text-zinc-400 text-xs">Highest quality materials</p>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-white font-semibold text-sm">Premium Products</p>
-                                <p class="text-zinc-400 text-xs">Highest quality materials</p>
+                        </div>
+
+                        <div class="absolute -right-8 top-[40%] floating-card card-glass rounded-xl px-5 py-4 w-64" style="animation-delay: 0.5s">
+                            <div class="flex items-center gap-4">
+                                <div class="w-11 h-11 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
+                                    <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-white font-semibold text-sm">Exclusive Designs</p>
+                                    <p class="text-zinc-400 text-xs">Unique collections</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="absolute left-4 bottom-[15%] floating-card card-glass rounded-xl px-5 py-4 w-64" style="animation-delay: 1s">
+                            <div class="flex items-center gap-4">
+                                <div class="w-11 h-11 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
+                                    <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-white font-semibold text-sm">Personalized Service</p>
+                                    <p class="text-zinc-400 text-xs">Expert guidance</p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="absolute -right-8 top-[40%] floating-card card-glass rounded-xl px-5 py-4 w-64" style="animation-delay: 0.5s">
-                        <div class="flex items-center gap-4">
-                            <div class="w-11 h-11 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
-                                <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-white font-semibold text-sm">Exclusive Designs</p>
-                                <p class="text-zinc-400 text-xs">Unique collections</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="absolute left-4 bottom-[15%] floating-card card-glass rounded-xl px-5 py-4 w-64" style="animation-delay: 1s">
-                        <div class="flex items-center gap-4">
-                            <div class="w-11 h-11 rounded-lg bg-orange-500/20 flex items-center justify-center shrink-0">
-                                <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <p class="text-white font-semibold text-sm">Personalized Service</p>
-                                <p class="text-zinc-400 text-xs">Expert guidance</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
             </div>
-        </div>
 
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <svg class="w-5 h-5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-            </svg>
-        </div>
-    </section>
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+                <svg class="w-5 h-5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </div>
+        </section>
 
     {{-- Featured Products Section --}}
     <section id="featured-products" class="py-24 lg:py-32 bg-cream blueprint-grid">
@@ -183,6 +183,12 @@
                     Explore our diverse range of ceramic and porcelain categories.
                 </p>
             </div>
+            <div class="h-80 bg-gradient-to-b from-[#f2eedf] to-[#999689] rounded-xl flex items-end p-6 hover:shadow-lg transition">
+    <div>
+        <p class="text-xs text-white uppercase tracking-widest mb-1">Collection</p>
+        <h3 class="text-xl text-white font-bold">Floor Tiles</h3>
+    </div>
+</div>
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="group relative rounded-2xl overflow-hidden aspect-[3/4] bg-zinc-100 cursor-pointer">
@@ -412,7 +418,64 @@
         </div>
     </section>
 
-    {{-- Contact Section --}}
+    {{-- SECCIÓN AÑADIDA: ACCESO A TABLONES (MADERAS) --}}
+    <section class="py-24 bg-white relative overflow-hidden">
+        {{-- Patrón de fondo sutil --}}
+        <div class="absolute inset-0 pointer-events-none opacity-[0.03]" style="background-image: radial-gradient(circle at 2px 2px, black 1px, transparent 0); background-size: 32px 32px;"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-gold-600 text-xs font-semibold uppercase tracking-[0.2em]">Wood Grain Finishes</span>
+                <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-zinc-900 mt-4 mb-4">Tablones Collection</h2>
+                <div class="section-ornament">
+                    <span class="ornament-diamond"></span>
+                </div>
+                <p class="mt-4 text-zinc-500 max-w-2xl mx-auto text-lg font-light">
+                    Bring natural warmth to your space with our realistic wood-effect ceramic planks. Timeless beauty without the maintenance.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="bg-cream rounded-2xl p-5 text-center hover:-translate-y-1 transition duration-300 border border-zinc-100">
+                    <div class="w-full h-40 rounded-xl mb-4 overflow-hidden shadow-sm">
+                        <img src="https://placehold.co/400x300/e6d5b8/ffffff?text=Roble" alt="Light Oak" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-semibold text-zinc-900">Light Oak</h4>
+                    <p class="text-xs text-zinc-500 mt-1">20x120 cm</p>
+                </div>
+                <div class="bg-cream rounded-2xl p-5 text-center hover:-translate-y-1 transition duration-300 border border-zinc-100">
+                    <div class="w-full h-40 rounded-xl mb-4 overflow-hidden shadow-sm">
+                        <img src="https://placehold.co/400x300/8b5a2b/ffffff?text=Nogal" alt="Walnut" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-semibold text-zinc-900">American Walnut</h4>
+                    <p class="text-xs text-zinc-500 mt-1">20x120 cm</p>
+                </div>
+                <div class="bg-cream rounded-2xl p-5 text-center hover:-translate-y-1 transition duration-300 border border-zinc-100">
+                    <div class="w-full h-40 rounded-xl mb-4 overflow-hidden shadow-sm">
+                        <img src="https://placehold.co/400x300/3e2723/ffffff?text=Wengue" alt="Wenge" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-semibold text-zinc-900">Dark Wenge</h4>
+                    <p class="text-xs text-zinc-500 mt-1">15x90 cm</p>
+                </div>
+                <div class="bg-cream rounded-2xl p-5 text-center hover:-translate-y-1 transition duration-300 border border-zinc-100">
+                    <div class="w-full h-40 rounded-xl mb-4 overflow-hidden shadow-sm">
+                        <img src="https://placehold.co/400x300/757575/ffffff?text=Gris" alt="Ash" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-semibold text-zinc-900">Gray Ash</h4>
+                    <p class="text-xs text-zinc-500 mt-1">20x120 cm</p>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="{{ route('tablones') }}" wire:navigate class="btn-gold px-8 py-3.5 rounded-lg text-sm font-semibold uppercase tracking-wider transition-all hover:shadow-xl hover:shadow-gold-500/25 hover:-translate-y-0.5 inline-block">
+                    Explore Tablones Catalog
+                </a>
+            </div>
+        </div>
+    </section>
+
+    {{-- Contact Section --}}php artisan view:clear
+php artisan cache:clear
     <section id="contact" class="py-24 lg:py-32 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
@@ -505,10 +568,10 @@
                 const canvas = document.getElementById('canvas-splendor');
                 if (!canvas) return;
 
-                const renderer = new THREE.WebGLRenderer({ 
-                    canvas, 
-                    antialias: true, 
-                    alpha: true 
+                const renderer = new THREE.WebGLRenderer({
+                    canvas,
+                    antialias: true,
+                    alpha: true
                 });
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -553,7 +616,7 @@
                 const particleCount = 15000;
                 const currentPositions = new Float32Array(particleCount * 3);
                 const targetPositions = new Float32Array(particleCount * 3);
-                
+
                 for (let i = 0; i < particleCount * 3; i++) {
                     currentPositions[i] = (Math.random() - 0.5) * 10;
                 }
@@ -680,7 +743,7 @@
                 const triggerMorph = () => {
                     currentShapeIdx = (currentShapeIdx + 1) % shapes.length;
                     shapes[currentShapeIdx]();
-                    
+
                     if (shapes[currentShapeIdx] === setTargetText) {
                         rotationEnabled = false;
                         gsap.to(points.rotation, { x: 0, y: 0, z: 0, duration: 3, ease: "power2.inOut" });

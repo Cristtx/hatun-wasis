@@ -22,7 +22,7 @@ test('product main component can be rendered and save works', function () {
     expect(Product::count())->toBe(1);
 });
 
-test('product main component validation fails when disponible is false', function () {
+test('product main component can be saved with disponible as false', function () {
     $user = User::factory()->create();
     $this->actingAs($user);
 
@@ -33,5 +33,26 @@ test('product main component validation fails when disponible is false', functio
         ->set('precio', 25.50)
         ->set('disponible', false)
         ->call('save')
-        ->assertHasErrors(['disponible']);
+        ->assertHasNoErrors();
+
+    expect(Product::where('disponible', false)->count())->toBe(1);
+});
+
+test('product availability can be toggled', function () {
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    $product = Product::factory()->create(['disponible' => true]);
+
+    Livewire::test(ProductMain::class)
+        ->call('toggleDisponible', $product);
+
+    $product->refresh();
+    expect($product->disponible)->toBe(false);
+
+    Livewire::test(ProductMain::class)
+        ->call('toggleDisponible', $product);
+
+    $product->refresh();
+    expect($product->disponible)->toBe(true);
 });
