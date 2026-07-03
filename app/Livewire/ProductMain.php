@@ -3,20 +3,22 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-use App\Models\Product; // Asegúrate de que este sea el nombre correcto de tu modelo
+use App\Models\Product;
+use Flux;
 
 class ProductMain extends Component
 {
-    use WithPagination;
+    use WithFileUploads, WithPagination;
 
     // --- VARIABLES DE INTERFAZ Y BÚSQUEDA ---
     public $search = '';
     public $productSelectedId; // Para el modal de imágenes
     public $deleteId; // Para el modal de confirmación de borrado
 
-    // --- VARIABLES DEL CRUD (Módulo Cerámicas) ---
-    public $id; // ID del producto (null si es nuevo)
+    // --- VARIABLES DEL CRUD ---
+    public $id; 
     public $codigo_sku;
     public $nombre;
     public $descripcion;
@@ -26,6 +28,7 @@ class ProductMain extends Component
     public $cantidad; // Stock en cajas/unidades
     public $precio; // Precio de venta
     public $disponible = true;
+    public $model_3d;
 
     // Resetear paginación cuando se busca algo
     public function updatingSearch()
@@ -38,7 +41,7 @@ class ProductMain extends Component
     public function create()
     {
         // Limpiamos el formulario
-        $this->reset(['id', 'codigo_sku', 'nombre', 'descripcion', 'tipo', 'formato', 'acabado', 'cantidad', 'precio']);
+        $this->reset(['id', 'codigo_sku', 'nombre', 'descripcion', 'tipo', 'formato', 'acabado', 'cantidad', 'precio', 'disponible', 'model_3d']);
         $this->disponible = true;
 
         // La vista Blade se encarga de abrir el modal con <flux:modal.trigger>
@@ -58,6 +61,7 @@ class ProductMain extends Component
         $this->cantidad = $producto->cantidad;
         $this->precio = $producto->precio;
         $this->disponible = $producto->disponible;
+        $this->model_3d = $producto->model_3d_path;
 
         // Abrimos el modal programáticamente
         $this->dispatch('modal', name: 'showform')->to('flux::modal');
@@ -73,6 +77,11 @@ class ProductMain extends Component
             'cantidad' => 'required|numeric|min:0',
         ]);
 
+        $modelPath = null;
+        if ($this->model_3d) {
+            $modelPath = $this->model_3d->store('models', 'public');
+        }
+
         // Guardar o Actualizar
         Product::updateOrCreate(
             ['id' => $this->id],
@@ -86,16 +95,25 @@ class ProductMain extends Component
                 'cantidad' => $this->cantidad,
                 'precio' => $this->precio,
                 'disponible' => $this->disponible,
+                'model_3d_path' => $modelPath,
             ]
         );
 
         // Cerramos modal y mostramos mensaje
         $this->dispatch('modal', name: 'showform')->to('flux::modal');
-        $this->dispatch('toast', variant: 'success', heading: '¡Éxito!', message: 'Material guardado correctamente.');
-        $this->reset(['id', 'codigo_sku', 'nombre', 'descripcion', 'tipo', 'formato', 'acabado', 'cantidad', 'precio']);
-    }
+        
+        if (class_exists('Flux')) {
+             Flux::toast(
+                heading: $this->id ? 'Producto actualizado.' : 'Producto registrado.',
+                text: 'El registro se realizó correctamente.',
+                variant: 'success'
+            );
+        } else {
+            $this->dispatch('toast', variant: 'success', heading: '¡Éxito!', message: 'Material guardado correctamente.');
+        }
 
-    // --- FUNCIONES EXTRA (Tus funciones originales) ---
+        $this->reset(['id', 'codigo_sku', 'nombre', 'descripcion', 'tipo', 'formato', 'acabado', 'cantidad', 'precio', 'disponible', 'model_3d']);
+    }
 
     public function toggleDisponible($id)
     {

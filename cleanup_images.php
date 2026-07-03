@@ -5,11 +5,11 @@ use Illuminate\Support\Facades\Storage;
 
 $count = 0;
 $images = Image::all();
-echo "Found " . $images->count() . " images in database.\n";
+echo 'Found '.$images->count()." images in database.\n";
 
 foreach ($images as $image) {
-    if (!Storage::disk('public')->exists($image->url)) {
-        echo "Deleting missing image: " . $image->url . "\n";
+    if (! Storage::disk('public')->exists($image->url)) {
+        echo 'Deleting missing image: '.$image->url."\n";
         $image->delete();
         $count++;
     }
