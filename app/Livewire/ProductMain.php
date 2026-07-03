@@ -11,7 +11,7 @@ use Livewire\WithPagination;
 
 class ProductMain extends Component
 {
-    use WithPagination, WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     public $search;
 
@@ -50,7 +50,7 @@ class ProductMain extends Component
     public function save()
     {
         $this->validate();
-        
+
         $modelPath = null;
         if ($this->model_3d) {
             $modelPath = $this->model_3d->store('models', 'public');

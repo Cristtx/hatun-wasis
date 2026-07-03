@@ -12,9 +12,10 @@ class ProductImageSeeder extends Seeder
     public function run(): void
     {
         $directory = storage_path('app/public/products');
-        
-        if (!File::exists($directory)) {
+
+        if (! File::exists($directory)) {
             $this->command->error("Directory {$directory} does not exist.");
+
             return;
         }
 
@@ -22,12 +23,12 @@ class ProductImageSeeder extends Seeder
 
         foreach ($files as $file) {
             $filename = $file->getFilename();
-            $relativePath = 'products/' . $filename;
+            $relativePath = 'products/'.$filename;
 
             // Create a new product
             $product = Product::create([
-                'nombre' => 'Producto ' . $filename,
-                'descripcion' => 'Descripción para ' . $filename,
+                'nombre' => 'Producto '.$filename,
+                'descripcion' => 'Descripción para '.$filename,
                 'cantidad' => rand(1, 100),
                 'precio' => rand(10, 1000),
                 'disponible' => true,
@@ -38,7 +39,7 @@ class ProductImageSeeder extends Seeder
                 'url' => $relativePath,
             ]);
         }
-        
+
         $this->command->info('Successfully seeded products with images.');
     }
 }

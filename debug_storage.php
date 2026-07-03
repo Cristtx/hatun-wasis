@@ -2,12 +2,13 @@
 
 require __DIR__.'/vendor/autoload.php';
 $app = require __DIR__.'/bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel = $app->make(Kernel::class);
 $kernel->bootstrap();
 
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Storage;
 
-echo "Public disk root: " . Storage::disk('public')->path('') . "\n";
+echo 'Public disk root: '.Storage::disk('public')->path('')."\n";
 echo "Checking if assets/img/products/prod_img_1.jpeg exists...\n";
 if (Storage::disk('public')->exists('assets/img/products/prod_img_1.jpeg')) {
     echo "YES, it exists!\n";
