@@ -1,0 +1,337 @@
+@import 'tailwindcss';
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@source '../views';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../vendor/livewire/flux-pro/stubs/**/*.blade.php';
+@source '../../vendor/livewire/flux/stubs/**/*.blade.php';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+    --color-zinc-50: #fafafa;
+    --color-zinc-100: #f5f5f5;
+    --color-zinc-200: #e5e5e5;
+    --color-zinc-300: #d4d4d4;
+    --color-zinc-400: #a3a3a3;
+    --color-zinc-500: #737373;
+    --color-zinc-600: #525252;
+    --color-zinc-700: #404040;
+    --color-zinc-800: #262626;
+    --color-zinc-900: #171717;
+    --color-zinc-950: #0a0a0a;
+
+    --color-accent: var(--color-neutral-800);
+    --color-accent-content: var(--color-neutral-800);
+    --color-accent-foreground: var(--color-white);
+
+    --color-gold-50: #fdf8ef;
+    --color-gold-100: #f9edd3;
+    --color-gold-200: #f2d9a5;
+    --color-gold-300: #e9bf6d;
+    --color-gold-400: #d4a843;
+    --color-gold-500: #c9a96e;
+    --color-gold-600: #a8853e;
+    --color-gold-700: #8c6630;
+    --color-gold-800: #75532c;
+    --color-gold-900: #644528;
+
+    --color-cream: #f8f4ef;
+    --color-beige: #f0ebe3;
+    --color-warm-gray: #f3f0ec;
+}
+
+@layer theme {
+    .dark {
+        --color-accent: var(--color-white);
+        --color-accent-content: var(--color-white);
+        --color-accent-foreground: var(--color-neutral-800);
+    }
+}
+
+@layer base {
+
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    }
+}
+
+[data-flux-field]:not(ui-radio, ui-checkbox) {
+    @apply grid gap-2;
+}
+
+[data-flux-label] {
+    @apply  !mb-0 !leading-tight;
+}
+
+input:focus[data-flux-control],
+textarea:focus[data-flux-control],
+select:focus[data-flux-control] {
+    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+}
+
+/* ===== Landing Page Custom Styles ===== */
+
+.hero-overlay {
+    background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+}
+
+.nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #f97316;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.floating-card {
+    animation: float 3s ease-in-out infinite;
+}
+
+.floating-card:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.floating-card:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.section-hidden {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s ease-out;
+}
+
+.section-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.product-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card-glass {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card-glass:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+    border-color: rgba(201, 169, 110, 0.4);
+    box-shadow: 0 20px 40px -12px rgba(201, 169, 110, 0.15);
+    transform: translateY(-8px);
+}
+
+.product-card .product-image {
+    transition: transform 0.6s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.gold-border {
+    border-color: #c9a96e;
+}
+
+.gold-text {
+    color: #c9a96e;
+}
+
+.gold-bg {
+    background-color: #c9a96e;
+}
+
+.gold-bg-light {
+    background-color: #fdf8ef;
+}
+
+.btn-gold {
+    background-color: #c9a96e;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-gold:hover {
+    background-color: #b8944f;
+    color: white;
+}
+
+.btn-outline-gold {
+    border: 1px solid #c9a96e;
+    color: #c9a96e;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-gold:hover {
+    background-color: #c9a96e;
+    color: white;
+}
+
+.btn-orange {
+    background-color: #f97316;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-orange:hover {
+    background-color: #ea580c;
+    color: white;
+}
+
+.btn-outline-orange {
+    border: 1px solid #f97316;
+    color: #f97316;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-orange:hover {
+    background-color: #f97316;
+    color: white;
+}
+
+.card-glass {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.card-glass:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.1));
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.header-scrolled {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.gradient-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, #c9a96e, transparent);
+}
+
+.gallery-item {
+    overflow: hidden;
+    position: relative;
+}
+
+.gallery-item img {
+    transition: transform 0.6s ease;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.08);
+}
+
+.gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.gallery-item:hover .gallery-overlay {
+    opacity: 1;
+}
+
+/* Swiper overrides for product carousels */
+.swiper-button-prev,
+.swiper-button-next {
+    color: #c9a96e !important;
+}
+
+.swiper-pagination-bullet-active {
+    background: #c9a96e !important;
+}
+
+/* Section divider ornament */
+.section-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.section-ornament::before,
+.section-ornament::after {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: #c9a96e;
+}
+
+.blueprint-grid {
+    background-image: 
+        linear-gradient(rgba(201, 169, 110, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201, 169, 110, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+

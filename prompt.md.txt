@@ -1,0 +1,126 @@
+# Hatun Wasi - Hero Redesign (Iteration 2)
+
+IMPORTANT
+
+Do NOT modify business logic.
+Do NOT modify controllers.
+Do NOT modify Livewire components.
+Do NOT modify routes.
+Do NOT modify models.
+Do NOT modify database.
+Do NOT modify migrations.
+Do NOT modify authentication.
+Do NOT create new CRUD modules.
+
+Keep every existing functionality working exactly as it is.
+
+This project already works correctly.
+Landing Page, Login, Dashboard, Product CRUD, Client CRUD and Image Upload are functional.
+
+Everything displayed must continue using the existing database.
+
+Do NOT hardcode products or images.
+
+If a product has no image, display a professional fallback instead of a broken image.
+
+--------------------------------------------------
+
+Current Task
+
+Improve ONLY the Hero section.
+
+Do NOT modify any other section of the landing page.
+
+--------------------------------------------------
+
+Brand Identity
+
+Use the Hatun Wasi visual identity.
+
+Primary color:
+Orange (matching the Hatun Wasi logo)
+
+Secondary color:
+White
+
+Background:
+Black or Dark Charcoal
+
+Accent:
+Light gray
+
+Do NOT use the gold color palette anymore.
+
+--------------------------------------------------
+
+Hero Requirements
+
+Create a premium ceramic showroom appearance.
+
+The Hero should occupy almost the entire first screen.
+
+Reduce empty space.
+
+Use a strong visual hierarchy.
+
+Layout:
+
+LEFT SIDE
+
+- Small Premium Collection badge.
+- Large "Hatun Wasi" title.
+- Better subtitle describing the business.
+- Two modern CTA buttons.
+- Smooth entrance animations.
+
+RIGHT SIDE
+
+- Large ceramic or porcelain image.
+- Use existing project images whenever possible.
+- Keep the three floating feature cards.
+- Overlay the cards on the image.
+- Add glassmorphism.
+- Soft shadows.
+- Smooth hover animations.
+
+--------------------------------------------------
+
+Navigation
+
+Keep the existing logo.
+
+Transparent navigation over the Hero.
+
+Blur effect while scrolling.
+
+Orange hover effects.
+
+Responsive navigation.
+
+--------------------------------------------------
+
+General Style
+
+Modern.
+
+Luxury.
+
+Elegant.
+
+Minimal.
+
+Responsive.
+
+Professional.
+
+--------------------------------------------------
+
+Do NOT modify backend code.
+
+Do NOT modify database queries.
+
+Do NOT modify Livewire logic.
+
+Do NOT change existing functionality.
+
+Only redesign the Hero section.
