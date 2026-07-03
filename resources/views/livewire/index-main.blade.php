@@ -407,11 +407,9 @@
             <div class="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
                 <div class="relative">
                     <div class="aspect-[4/5] rounded-3xl overflow-hidden bg-zinc-200 shadow-xl">
-                        <div class="w-full h-full bg-gradient-to-br from-beige to-gold-100 flex items-center justify-center">
-                            <svg class="w-24 h-24 text-gold-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                            </svg>
-                        </div>
+                        <img src="{{ asset('assets/img/fachadas/fachada-ceramica.jpg') }}" 
+                             alt="Fachada Hatun Wasi" 
+                             class="w-full h-full object-cover">
                     </div>
                     <div class="absolute -bottom-6 -right-6 w-40 h-40 rounded-2xl bg-gold-500 hidden lg:flex items-center justify-center shadow-xl">
                         <div class="text-center text-white">
