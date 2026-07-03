@@ -1,4 +1,5 @@
 <div>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
     <style>
         @keyframes kenburns {
             0% { transform: scale(1); }
@@ -7,11 +8,116 @@
         .animate-kenburns {
             animation: kenburns 7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
+        .product-card-tilt {
+            perspective: 1000px;
+        }
+        .product-card-inner {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+        .category-card-tilt {
+            perspective: 1200px;
+        }
+        .category-card-inner {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+            box-shadow: 
+                0 10px 30px -5px rgba(0,0,0,0.3),
+                0 0 0 1px rgba(255,255,255,0.1) inset,
+                0 15px 0px #1a1a1a; /* Thickness simulation */
+        }
+        .model-preview {
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+            pointer-events: none;
+        }
+        .group:hover .model-preview {
+            opacity: 1;
+        }
+        .group:hover .product-image {
+            opacity: 0;
+        }
+        /* Spotlight effect helper */
+        .spotlight {
+            pointer-events: none;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(212,175,55,0.2) 0%, transparent 70%);
+        }
+        
+        /* Material Textures */
+        .mat-porcelanato {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            position: relative;
+        }
+        .mat-porcelanato::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+        }
+
+        .mat-tablones {
+            background: linear-gradient(180deg, #5d4037 0%, #3e2723 100%);
+            position: relative;
+        }
+        .mat-tablones::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(// Wood Grain Effect
+                90deg,
+                transparent,
+                transparent 40px,
+                rgba(0,0,0,0.05) 41px,
+                transparent 42px
+            );
+            opacity: 0.4;
+        }
+
+        .mat-ceramicas {
+            background: linear-gradient(135deg, #fffdfa 0%, #f5eee6 100%);
+            position: relative;
+        }
+        .mat-ceramicas::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, transparent 100%);
+        }
+
+        .mat-pegamentos {
+            background: linear-gradient(135deg, #9ca3af 0%, #4b5563 100%);
+            position: relative;
+        }
+        .mat-pegamentos::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+        }
+
+        .glint {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                transparent,
+                rgba(255,255,255,0.3),
+                transparent
+            );
+            transform: skewX(-25deg);
+            transition: 0.7s;
+        }
+        .group:hover .glint {
+            left: 150%;
+        }
     </style>
  
     {{-- Hero Section --}}
 
-    <section id="hero" class="relative min-h-screen flex items-center overflow-hidden bg-zinc-950">
+    <section id="hero" class="relative min-h-screen flex items-center overflow-hidden bg-black">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
         <canvas id="canvas-splendor" class="absolute inset-0 z-0 pointer-events-none" style="filter: contrast(1.1) brightness(1.1); opacity: 1;"></canvas>
@@ -99,6 +205,31 @@
         </div>
     </section>
 
+    {{-- 3D Viewer Modal --}}
+    <div id="viewer-3d-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/90 backdrop-blur-md transition-all duration-300">
+        <div class="relative w-full max-w-4xl aspect-square bg-zinc-900 rounded-3xl overflow-hidden shadow-2xl border border-zinc-800">
+            <button onclick="close3DViewer()" class="absolute top-6 right-6 z-10 p-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="absolute bottom-8 left-0 right-0 text-center z-10">
+                <h3 id="viewer-product-name" class="font-serif text-2xl text-white mb-2"></h3>
+                <p class="text-zinc-400 text-sm uppercase tracking-widest">Experiencia Inmersiva 3D</p>
+            </div>
+            <model-viewer 
+                id="main-3d-model"
+                src="" 
+                alt="Modelo 3D de producto" 
+                auto-rotate 
+                camera-controls 
+                shadow-intensity="1" 
+                environment-image="neutral"
+                exposure="1"
+                style="width: 100%; height: 100%; background-color: #000;"
+                touch-action="pan-y">
+            </model-viewer>
+        </div>
+    </div>
+
     {{-- Featured Products Section --}}
     <section id="featured-products" class="py-24 lg:py-32 bg-cream blueprint-grid">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -115,41 +246,67 @@
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 @forelse($productos as $item)
-                    <div class="product-card product-card-glass rounded-2xl overflow-hidden group">
-                        <div class="aspect-[4/3] overflow-hidden bg-zinc-50 relative">
-                            @if ($item->images->count() > 0)
-                                <img src="{{ Storage::url($item->images->first()->url) }}"
-                                     alt="{{ $item->nombre }}"
-                                     class="product-image w-full h-full object-cover"
-                                     loading="lazy">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center text-zinc-300">
-                                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
+                    <div class="product-card-tilt">
+                        <div class="product-card-inner product-card product-card-glass rounded-2xl overflow-hidden group cursor-pointer">
+                            <div class="aspect-[4/3] overflow-hidden bg-zinc-50 relative">
+                                @if ($item->images->count() > 0)
+                                    <img src="{{ Storage::url($item->images->first()->url) }}"
+                                         alt="{{ $item->nombre }}"
+                                         class="product-image w-full h-full object-cover transition-opacity duration-400"
+                                         loading="lazy">
+                                @else
+                                    <div class="product-image w-full h-full flex items-center justify-center text-zinc-300 transition-opacity duration-400">
+                                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                @endif
+
+                                @if($item->model_3d_path)
+                                    <div class="model-preview absolute inset-0 w-full h-full">
+                                        <model-viewer 
+                                            src="{{ Storage::url($item->model_3d_path) }}" 
+                                            alt="{{ $item->nombre }}" 
+                                            auto-rotate 
+                                            camera-controls 
+                                            disable-zoom
+                                            shadow-intensity="1" 
+                                            environment-image="neutral"
+                                            exposure="1"
+                                            style="width: 100%; height: 100%; background-color: transparent;"
+                                            touch-action="none">
+                                        </model-viewer>
+                                    </div>
+                                @endif
+
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                                <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0 flex gap-2 z-10">
+                                     @if($item->model_3d_path)
+                                         <button onclick="event.stopPropagation(); open3DViewer('{{ Storage::url($item->model_3d_path) }}', '{{ $item->nombre }}')" class="bg-gold-500 text-white text-xs font-medium px-3 py-1.5 rounded-full shadow-sm hover:bg-gold-600 transition-colors">
+                                             Ver en 3D
+                                         </button>
+                                     @endif
+                                     <span class="bg-white/90 backdrop-blur-sm text-zinc-800 text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
+                                         S/ {{ number_format($item->precio, 2) }}
+                                     </span>
                                 </div>
-                             @endif
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                                <span class="bg-white/90 backdrop-blur-sm text-zinc-800 text-xs font-medium px-3 py-1.5 rounded-full shadow-sm">
-                                    S/ {{ number_format($item->precio, 2) }}
-                                </span>
                             </div>
-                        </div>
-                        <div class="p-5">
-                            <h3 class="font-serif text-lg font-semibold text-zinc-900 mb-1 group-hover:text-gold-600 transition-colors">
-                                {{ $item->nombre }}
-                            </h3>
-                            @if($item->descripcion)
-                                <p class="text-zinc-500 text-sm line-clamp-2 mb-3">{{ $item->descripcion }}</p>
-                            @endif
-                            <div class="flex items-center justify-between">
-                                <span class="text-gold-600 font-semibold text-base">S/ {{ number_format($item->precio, 2) }}</span>
-                                <span class="text-xs text-zinc-400">Stock: {{ $item->cantidad }}</span>
+                            <div class="p-5">
+                                <h3 class="font-serif text-lg font-semibold text-zinc-900 mb-1 group-hover:text-gold-600 transition-colors">
+                                    {{ $item->nombre }}
+                                </h3>
+                                @if($item->descripcion)
+                                    <p class="text-zinc-500 text-sm line-clamp-2 mb-3">{{ $item->descripcion }}</p>
+                                @endif
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gold-600 font-semibold text-base">S/ {{ number_format($item->precio, 2) }}</span>
+                                    <span class="text-xs text-zinc-400">Stock: {{ $item->cantidad }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 @empty
+
                     <div class="col-span-full text-center py-16">
                         <svg class="w-16 h-16 mx-auto text-zinc-200 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
@@ -500,6 +657,107 @@
     </section>
 
     <script>
+        window.open3DViewer = (url, name) => {
+            const modal = document.getElementById('viewer-3d-modal');
+            const modelViewer = document.getElementById('main-3d-model');
+            const nameElement = document.getElementById('viewer-product-name');
+            
+            modelViewer.src = url;
+            nameElement.textContent = name;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.close3DViewer = () => {
+            const modal = document.getElementById('viewer-3d-modal');
+            const modelViewer = document.getElementById('main-3d-model');
+            
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+            modelViewer.src = '';
+        };
+
+        // Tilt Effect for Product Cards
+        const initTilt = () => {
+            const productCards = document.querySelectorAll('.product-card-inner');
+            productCards.forEach(card => {
+                const wrapper = card.parentElement;
+                
+                wrapper.addEventListener('mousemove', (e) => {
+                    const rect = wrapper.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / centerY * 10; // Max 10deg
+                    const rotateY = (centerX - x) / centerX * 10; // Max 10deg
+                    
+                    gsap.to(card, {
+                        rotationX: rotateX,
+                        rotationY: rotateY,
+                        duration: 0.4,
+                        ease: 'power2.out'
+                    });
+                });
+                
+                wrapper.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        rotationX: 0,
+                        rotationY: 0,
+                        duration: 0.6,
+                        ease: 'elastic.out(1, 0.3)'
+                    });
+                });
+            });
+
+            const categoryCards = document.querySelectorAll('.category-card-inner');
+            categoryCards.forEach(card => {
+                const wrapper = card.parentElement;
+                
+                wrapper.addEventListener('mousemove', (e) => {
+                    const rect = wrapper.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / centerY * 15; // Slightly more tilt for categories
+                    const rotateY = (centerX - x) / centerX * 15; 
+                    
+                    gsap.to(card, {
+                        rotationX: rotateX,
+                        rotationY: rotateY,
+                        duration: 0.4,
+                        ease: 'power2.out'
+                    });
+
+                    // Update spotlight position
+                    const spotlight = card.querySelector('.spotlight');
+                    if (spotlight) {
+                        const percX = (x / rect.width) * 100;
+                        const percY = (y / rect.height) * 100;
+                        spotlight.style.setProperty('--x', `${percX}%`);
+                        spotlight.style.setProperty('--y', `${percY}%`);
+                    }
+                });
+                
+                wrapper.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        rotationX: 0,
+                        rotationY: 0,
+                        duration: 0.6,
+                        ease: 'elastic.out(1, 0.3)'
+                    });
+                });
+            });
+        };
+
         window.onload = () => {
             try {
                 const canvas = document.getElementById('canvas-splendor');
@@ -512,7 +770,8 @@
                 });
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-                renderer.setClearColor(0x09090b, 0);
+                        renderer.setClearColor(0x000000, 0);
+
 
                 const scene = new THREE.Scene();
                 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -538,9 +797,10 @@
                         void main() {
                             vec2 uv = vUv;
                             float n = sin(uv.x * 2.0 + u_time * 0.1) * cos(uv.y * 2.0 + u_time * 0.1);
-                            vec3 gold = vec3(0.8, 0.6, 0.2);
-                            vec3 zinc = vec3(0.05, 0.05, 0.06);
-                            gl_FragColor = vec4(mix(zinc, gold, n * 0.3 + 0.2), 0.6);
+                             vec3 gold = vec3(0.6, 0.4, 0.02);
+                             vec3 zinc = vec3(0.0, 0.0, 0.0);
+                             gl_FragColor = vec4(mix(zinc, gold, n * 0.1 + 0.05), 0.6);
+
                         }
                     `,
                     transparent: true
@@ -549,10 +809,11 @@
                 bgMesh.position.z = -1;
                 scene.add(bgMesh);
 
-                // Optimized Particles
-                const particleCount = 15000;
-                const currentPositions = new Float32Array(particleCount * 3);
-                const targetPositions = new Float32Array(particleCount * 3);
+                 // Optimized Particles
+                 const particleCount = 40000;
+                 const currentPositions = new Float32Array(particleCount * 3);
+                 const targetPositions = new Float32Array(particleCount * 3);
+
                 
                 for (let i = 0; i < particleCount * 3; i++) {
                     currentPositions[i] = (Math.random() - 0.5) * 10;
@@ -561,54 +822,63 @@
                 const geometry = new THREE.BufferGeometry();
                 geometry.setAttribute('position', new THREE.BufferAttribute(currentPositions, 3));
 
-                const createCircleTexture = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = 64; canvas.height = 64;
-                    const ctx = canvas.getContext('2d');
-                    const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-                    grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-                    grad.addColorStop(0.1, 'rgba(212, 175, 55, 0.8)');
-                    grad.addColorStop(0.4, 'rgba(212, 175, 55, 0.2)');
-                    grad.addColorStop(1, 'rgba(212, 175, 55, 0)');
-                    ctx.fillStyle = grad;
-                    ctx.fillRect(0, 0, 64, 64);
-                    return new THREE.CanvasTexture(canvas);
-                };
+                    const createCircleTexture = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = 64; canvas.height = 64;
+                        const ctx = canvas.getContext('2d');
+                        const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+                        grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+                        grad.addColorStop(0.15, 'rgba(255, 215, 0, 1)');
+                        grad.addColorStop(0.4, 'rgba(212, 175, 55, 0.3)');
+                        grad.addColorStop(0.7, 'rgba(212, 175, 55, 0)');
+                        
+                        ctx.beginPath();
+                        ctx.arc(32, 32, 32, 0, Math.PI * 2);
+                        ctx.fillStyle = grad;
+                        ctx.fill();
+                        return new THREE.CanvasTexture(canvas);
+                    };
 
-                const material = new THREE.PointsMaterial({
-                    color: 0xD4AF37,
-                    size: 0.015,
-                    map: createCircleTexture(),
-                    transparent: true,
-                    opacity: 0.9,
-                    blending: THREE.AdditiveBlending,
-                    depthWrite: false
-                });
+
+                  const material = new THREE.PointsMaterial({
+                      color: 0xDAA520,
+                      size: 0.018,
+                      map: createCircleTexture(),
+                      transparent: true,
+                      opacity: 1.0,
+                      blending: THREE.AdditiveBlending,
+                      depthWrite: false
+                  });
+
+
                 const points = new THREE.Points(geometry, material);
                 scene.add(points);
 
                 // Volumetric Shape Definitions
-                const setTargetRandom = () => {
-                    for (let i = 0; i < particleCount; i++) {
-                        const r = Math.pow(Math.random(), 0.5) * 6;
-                        const theta = Math.random() * Math.PI * 2;
-                        const phi = Math.random() * Math.PI;
-                        targetPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-                        targetPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-                        targetPositions[i * 3 + 2] = r * Math.cos(phi);
-                    }
-                };
+                 const setTargetRandom = () => {
+                     for (let i = 0; i < particleCount; i++) {
+                         const isEdge = Math.random() > 0.3;
+                         const r = isEdge ? 6 : Math.random() * 6;
+                         const theta = Math.random() * Math.PI * 2;
+                         const phi = Math.random() * Math.PI;
+                         targetPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                         targetPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                         targetPositions[i * 3 + 2] = r * Math.cos(phi);
+                     }
+                 };
 
-                const setTargetText = () => {
-                    const textCanvas = document.createElement('canvas');
-                    const textCtx = textCanvas.getContext('2d');
-                    textCanvas.width = 800;
-                    textCanvas.height = 200;
-                    textCtx.fillStyle = 'white';
-                    textCtx.font = 'bold 80px serif';
-                    textCtx.textAlign = 'center';
-                    textCtx.textBaseline = 'middle';
-                    textCtx.fillText('Hatun Wasi', 400, 100);
+
+                 const setTargetText = () => {
+                     const textCanvas = document.createElement('canvas');
+                     const textCtx = textCanvas.getContext('2d');
+                     textCanvas.width = 800;
+                     textCanvas.height = 200;
+                     textCtx.fillStyle = 'white';
+                     textCtx.font = 'bold 80px "Cinzel", serif';
+                     textCtx.textAlign = 'center';
+                     textCtx.textBaseline = 'middle';
+                     textCtx.fillText('HATUN WASI', 400, 100);
+
 
                     const imageData = textCtx.getImageData(0, 0, 800, 200).data;
                     const pointsArr = [];
@@ -628,39 +898,85 @@
                     }
                 };
 
-                const setTargetBlock = () => {
-                    for (let i = 0; i < particleCount; i++) {
-                        targetPositions[i * 3] = (Math.random() - 0.5) * 6;
-                        targetPositions[i * 3 + 1] = (Math.random() - 0.5) * 0.4;
-                        targetPositions[i * 3 + 2] = (Math.random() - 0.5) * 4;
-                    }
-                };
+                 const setTargetBlock = () => {
+                     for (let i = 0; i < particleCount; i++) {
+                         const isSurface = Math.random() > 0.4;
+                         if (isSurface) {
+                             const axis = Math.floor(Math.random() * 3);
+                             const side = Math.random() > 0.5 ? 3 : -3;
+                             const p = [0, 0, 0];
+                             p[axis] = side;
+                             p[(axis + 1) % 3] = (Math.random() - 0.5) * 6;
+                             p[(axis + 2) % 3] = (Math.random() - 0.5) * 6;
+                             targetPositions[i * 3] = p[0];
+                             targetPositions[i * 3 + 1] = p[1];
+                             targetPositions[i * 3 + 2] = p[2];
+                         } else {
+                             targetPositions[i * 3] = (Math.random() - 0.5) * 6;
+                             targetPositions[i * 3 + 1] = (Math.random() - 0.5) * 0.4;
+                             targetPositions[i * 3 + 2] = (Math.random() - 0.5) * 4;
+                         }
+                     }
+                 };
 
-                const setTargetPillar = () => {
-                    for (let i = 0; i < particleCount; i++) {
-                        const side = Math.floor(Math.random() * 6);
-                        const t = Math.random();
-                        const r = 2;
-                        const angle = (side * Math.PI) / 3;
-                        const nextAngle = ((side + 1) * Math.PI) / 3;
-                        targetPositions[i * 3] = r * (Math.cos(angle) * (1 - t) + Math.cos(nextAngle) * t);
-                        targetPositions[i * 3 + 2] = r * (Math.sin(angle) * (1 - t) + Math.sin(nextAngle) * t);
-                        targetPositions[i * 3 + 1] = (Math.random() - 0.5) * 5;
-                    }
-                };
+                 const setTargetBlackHole = () => {
+                     for (let i = 0; i < particleCount; i++) {
+                         const isDisk = Math.random() > 0.2;
+                         if (isDisk) {
+                             const angle = Math.random() * Math.PI * 2;
+                             const radius = Math.pow(Math.random(), 2) * 6 + 0.5;
+                             const height = (Math.random() - 0.5) * (radius * 0.1);
+                             targetPositions[i * 3] = radius * Math.cos(angle);
+                             targetPositions[i * 3 + 1] = height;
+                             targetPositions[i * 3 + 2] = radius * Math.sin(angle);
+                         } else {
+                             const r = Math.random() * 0.6;
+                             const theta = Math.random() * Math.PI * 2;
+                             const phi = Math.random() * Math.PI;
+                             targetPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                             targetPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                             targetPositions[i * 3 + 2] = r * Math.cos(phi);
+                         }
+                     }
+                 };
 
-                const setTargetDiamond = () => {
-                    for (let i = 0; i < particleCount; i++) {
-                        const sign = Math.random() > 0.5 ? 1 : -1;
-                        const r = Math.random();
-                        const theta = Math.random() * Math.PI * 2;
-                        const height = r * 3 * sign;
-                        const scale = 1 - Math.abs(height / 3);
-                        targetPositions[i * 3] = scale * Math.cos(theta) * 2;
-                        targetPositions[i * 3 + 1] = height;
-                        targetPositions[i * 3 + 2] = scale * Math.sin(theta) * 2;
-                    }
-                };
+
+                 const setTargetTorus = () => {
+                     const R = 3; // Major radius
+                     const r = 1; // Minor radius
+                     for (let i = 0; i < particleCount; i++) {
+                         const isSurface = Math.random() > 0.3;
+                         const theta = Math.random() * Math.PI * 2;
+                         const phi = Math.random() * Math.PI * 2;
+                         
+                         if (isSurface) {
+                             targetPositions[i * 3] = (R + r * Math.cos(theta)) * Math.cos(phi);
+                             targetPositions[i * 3 + 1] = (R + r * Math.cos(theta)) * Math.sin(phi);
+                             targetPositions[i * 3 + 2] = r * Math.sin(theta);
+                         } else {
+                             const innerR = Math.random() * r;
+                             targetPositions[i * 3] = (R + innerR * Math.cos(theta)) * Math.cos(phi);
+                             targetPositions[i * 3 + 1] = (R + innerR * Math.cos(theta)) * Math.sin(phi);
+                             targetPositions[i * 3 + 2] = innerR * Math.sin(theta);
+                         }
+                     }
+                 };
+
+
+                 const setTargetDiamond = () => {
+                     for (let i = 0; i < particleCount; i++) {
+                         const isEdge = Math.random() > 0.3;
+                         const sign = Math.random() > 0.5 ? 1 : -1;
+                         const r = isEdge ? 1 : Math.random();
+                         const theta = Math.random() * Math.PI * 2;
+                         const height = r * 3 * sign;
+                         const scale = 1 - Math.abs(height / 3);
+                         targetPositions[i * 3] = scale * Math.cos(theta) * 2;
+                         targetPositions[i * 3 + 1] = height;
+                         targetPositions[i * 3 + 2] = scale * Math.sin(theta) * 2;
+                     }
+                 };
+
 
                 const setTargetWave = () => {
                     for (let i = 0; i < particleCount; i++) {
@@ -673,7 +989,8 @@
                     }
                 };
 
-                const shapes = [setTargetRandom, setTargetText, setTargetBlock, setTargetPillar, setTargetDiamond, setTargetWave];
+                 const shapes = [setTargetRandom, setTargetText, setTargetBlackHole, setTargetTorus, setTargetDiamond, setTargetWave];
+
                 let currentShapeIdx = 0;
                 let rotationEnabled = true;
 
@@ -714,22 +1031,44 @@
                     mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
                 });
 
-                function animate(time) {
-                    bgMaterial.uniforms.u_time.value = time * 0.001;
-                    if (rotationEnabled) points.rotation.y += 0.001;
-                    points.position.x += (mouse.x * 0.5 - points.position.x) * 0.02;
-                    points.position.y += (mouse.y * 0.5 - points.position.y) * 0.02;
-                    renderer.render(scene, camera);
-                    requestAnimationFrame(animate);
-                }
+                 function animate(time) {
+                     bgMaterial.uniforms.u_time.value = time * 0.001;
+                     if (rotationEnabled) points.rotation.y += 0.001;
+                     points.position.x += (mouse.x * 0.5 - points.position.x) * 0.02;
+                     points.position.y += (mouse.y * 0.5 - points.position.y) * 0.02;
+                     
+                     // "Star Dust" Flow Effect for Text
+                     if (currentShapeIdx === 1) {
+                         const pos = geometry.attributes.position.array;
+                         for (let i = 0; i < particleCount * 3; i += 3) {
+                             pos[i] += Math.sin(time * 0.002 + i) * 0.002;
+                             pos[i+1] += Math.cos(time * 0.002 + i) * 0.002;
+                             pos[i+2] += Math.sin(time * 0.001 + i) * 0.002;
+                         }
+                         geometry.attributes.position.needsUpdate = true;
+                     }
+                     
+                     // Black Hole Swirl Effect
+                     if (currentShapeIdx === 2) {
+                         points.rotation.y += 0.02;
+                         points.rotation.z += 0.005;
+                     }
+                     
+                     renderer.render(scene, camera);
+                     requestAnimationFrame(animate);
+                 }
+
                 animate(0);
 
-                window.addEventListener('resize', () => {
-                    camera.aspect = window.innerWidth / window.innerHeight;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(window.innerWidth, window.innerHeight);
-                });
-            } catch (e) {
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        initTilt();
+    } catch (e) {
+
                 console.error('Splendor Error:', e);
             }
         };

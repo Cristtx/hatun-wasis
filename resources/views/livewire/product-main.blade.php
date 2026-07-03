@@ -51,6 +51,7 @@
             </div>
             <flux:input wire:model="nombre" label="Nombre producto" placeholder="Piedra marfil" />
             <flux:textarea wire:model="descripcion" label="Descripción"/>
+            <flux:input wire:model="model_3d" type="file" label="Modelo 3D (.glb)" accept=".glb,.gltf"/>
             <flux:input wire:model="cantidad" label="Cantidad" placeholder="12" type="number"/>
             <flux:input wire:model="precio" label="Precio" placeholder="45.50"/>
             <flux:checkbox wire:model="disponible" label="Disponible"/>

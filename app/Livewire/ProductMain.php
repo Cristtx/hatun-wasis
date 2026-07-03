@@ -6,17 +6,20 @@ use App\Models\Product;
 use Flux\Flux;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
 class ProductMain extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     public $search;
 
     public $descripcion;
 
     public $id;
+
+    public $model_3d;
 
     public $productSelectedId = null;
 
@@ -47,10 +50,17 @@ class ProductMain extends Component
     public function save()
     {
         $this->validate();
+        
+        $modelPath = null;
+        if ($this->model_3d) {
+            $modelPath = $this->model_3d->store('models', 'public');
+        }
+
         if (! $this->id) {
             Product::create([
                 'nombre' => $this->nombre,
                 'descripcion' => $this->descripcion,
+                'model_3d_path' => $modelPath,
                 'cantidad' => $this->cantidad,
                 'precio' => $this->precio,
                 'disponible' => $this->disponible,
@@ -62,13 +72,19 @@ class ProductMain extends Component
             );
         } else {
             $producto = Product::find($this->id);
-            $producto->update([
+            $updateData = [
                 'nombre' => $this->nombre,
                 'descripcion' => $this->descripcion,
                 'cantidad' => $this->cantidad,
                 'precio' => $this->precio,
                 'disponible' => $this->disponible,
-            ]);
+            ];
+
+            if ($modelPath) {
+                $updateData['model_3d_path'] = $modelPath;
+            }
+
+            $producto->update($updateData);
             Flux::toast(
                 heading: 'Producto actualizado.',
                 text: 'El registro se actualizo correctamente.',
@@ -83,6 +99,7 @@ class ProductMain extends Component
         $this->id = $item->id;
         $this->nombre = $item->nombre;
         $this->descripcion = $item->descripcion;
+        $this->model_3d = $item->model_3d_path;
         $this->cantidad = $item->cantidad;
         $this->precio = $item->precio;
         $this->disponible = $item->disponible;
@@ -91,7 +108,7 @@ class ProductMain extends Component
 
     public function create()
     {
-        $this->reset(['id', 'nombre', 'descripcion', 'cantidad', 'precio', 'disponible']);
+        $this->reset(['id', 'nombre', 'descripcion', 'model_3d', 'cantidad', 'precio', 'disponible']);
         $this->modal('showform')->show();
     }
 
