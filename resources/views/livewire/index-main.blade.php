@@ -113,6 +113,24 @@
         .group:hover .glint {
             left: 150%;
         }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+        }
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            display: flex;
+            align-items: flex-end;
+            padding: 1.5rem;
+            z-index: 10;
+        }
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
     </style>
  
     {{-- Hero Section --}}
@@ -343,11 +361,11 @@
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div class="group relative rounded-2xl overflow-hidden aspect-[3/4] bg-zinc-100 cursor-pointer">
-                    <div class="absolute inset-0 bg-gradient-to-br from-gold-100 to-beige"></div>
+                    <img src="{{ asset('images/cd/porcelanato.avif') }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-6">
                         <span class="text-white/70 text-xs uppercase tracking-widest">Collection</span>
-                        <h3 class="font-serif text-2xl text-white mt-1">Floor Tiles</h3>
+                        <h3 class="font-serif text-2xl text-white mt-1">Porcelanato</h3>
                     </div>
                     <div class="absolute top-6 right-6 w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -357,11 +375,11 @@
                 </div>
 
                 <div class="group relative rounded-2xl overflow-hidden aspect-[3/4] bg-zinc-100 cursor-pointer">
-                    <div class="absolute inset-0 bg-gradient-to-br from-zinc-200 to-beige"></div>
+                    <img src="{{ asset('images/cd/tablones.avif') }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-6">
                         <span class="text-white/70 text-xs uppercase tracking-widest">Collection</span>
-                        <h3 class="font-serif text-2xl text-white mt-1">Wall Tiles</h3>
+                        <h3 class="font-serif text-2xl text-white mt-1">Tablones</h3>
                     </div>
                     <div class="absolute top-6 right-6 w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -371,11 +389,11 @@
                 </div>
 
                 <div class="group relative rounded-2xl overflow-hidden aspect-[3/4] bg-zinc-100 cursor-pointer">
-                    <div class="absolute inset-0 bg-gradient-to-br from-gold-50 to-cream"></div>
+                    <img src="{{ asset('images/cd/ceramicas.jpg') }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-6">
                         <span class="text-white/70 text-xs uppercase tracking-widest">Collection</span>
-                        <h3 class="font-serif text-2xl text-white mt-1">Decorative</h3>
+                        <h3 class="font-serif text-2xl text-white mt-1">Cerámica</h3>
                     </div>
                     <div class="absolute top-6 right-6 w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -385,11 +403,11 @@
                 </div>
 
                 <div class="group relative rounded-2xl overflow-hidden aspect-[3/4] bg-zinc-100 cursor-pointer">
-                    <div class="absolute inset-0 bg-gradient-to-br from-zinc-100 to-beige"></div>
+                    <img src="{{ asset('images/cd/pegamentos.jpg') }}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
                     <div class="absolute bottom-0 left-0 right-0 p-6">
                         <span class="text-white/70 text-xs uppercase tracking-widest">Collection</span>
-                        <h3 class="font-serif text-2xl text-white mt-1">Outdoor</h3>
+                        <h3 class="font-serif text-2xl text-white mt-1">Pegamentos</h3>
                     </div>
                     <div class="absolute top-6 right-6 w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -407,7 +425,7 @@
             <div class="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
                 <div class="relative">
                     <div class="aspect-[4/5] rounded-3xl overflow-hidden bg-zinc-200 shadow-xl">
-                        <img src="{{ asset('assets/img/fachadas/fachada-ceramica.jpg') }}" 
+                        <img src="{{ asset('images/ig/fachada-ceramica.jpg') }}" 
                              alt="Fachada Hatun Wasi" 
                              class="w-full h-full object-cover">
                     </div>
@@ -541,17 +559,21 @@
             </div>
 
             @php
-                $galleryImages = collect();
+                $galleryImages = collect([
+                    (object)['url' => asset('images/g/la-esencia-de-los-materiales-naturales-explorando-porcelanatos-tipo-piedra-en-ambientes-residenciales_2.jpg')],
+                    (object)['url' => asset('images/g/China-Glossy-White-Glazed-Marble-Modern-Porcelain-Polished-Ceramic-Floor-Tiles.avif')],
+                    (object)['url' => asset('images/g/Porcelanato-Tiles-Floor-Ceramic-Porcelain-60-X-60cm-Porcelain-Tile-China-Porcelain-Spanish-Floor-Tile.avif')],
+                ]);
             @endphp
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 @forelse($galleryImages as $index => $image)
-                    <div class="gallery-item rounded-xl overflow-hidden {{ $index === 0 ? 'md:col-span-2 md:row-span-2' : '' }} aspect-square md:aspect-auto {{ $index > 0 ? ($index < 3 ? 'aspect-square' : 'aspect-[4/5]') : '' }}">
-                        <img src="{{ Storage::url($image->url) }}"
+                    <div class="gallery-item rounded-xl overflow-hidden aspect-square {{ $index < 3 ? 'aspect-square' : 'aspect-[4/5]' }}">
+                        <img src="{{ $image->url }}"
                              alt="Gallery image {{ $index + 1 }}"
-                             class="w-full h-full object-cover"
+                             class="w-full h-full object-cover absolute inset-0"
                              loading="lazy">
-                        <div class="gallery-overlay flex items-end p-6">
+                        <div class="gallery-overlay">
                             <span class="text-white text-sm font-medium">View Project</span>
                         </div>
                     </div>
